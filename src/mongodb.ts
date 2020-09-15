@@ -1,5 +1,5 @@
-const mongoose = require("mongoose");
-module.exports = async config => {
+import mongoose from "mongoose";
+export default async (config: string) => {
 	try {
 		await mongoose.connect(config, {
 			useNewUrlParser: true,

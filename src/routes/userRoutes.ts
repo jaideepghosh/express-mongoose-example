@@ -1,5 +1,5 @@
-const userModel = require("../models/user");
-const express = require("express");
+import userModel from "../models/user";
+import express from "express";
 const router = express.Router();
 
 router.get("/", async (req, res) => {
@@ -36,12 +36,20 @@ router.delete("/:id", async (req, res) => {
 
 router.patch("/:id", async (req, res) => {
 	try {
-		await userModel.findByIdAndUpdate(req.params.id, req.body);
-		await userModel.save();
-		res.send(user);
+		await userModel.findByIdAndUpdate(
+			req.params.id,
+			req.body,
+			(err: any, user: any) => {
+				if (err) {
+					res.status(500).send(err);
+				} else {
+					res.send(user);
+				}
+			}
+		);
 	} catch (err) {
 		res.status(500).send(err);
 	}
 });
 
-module.exports = router;
+export default router;

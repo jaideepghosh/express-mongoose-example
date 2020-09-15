@@ -1,5 +1,6 @@
-const courseModel = require("../models/course");
-const express = require("express");
+import courseModel from "../models/course";
+
+import express from "express";
 const router = express.Router();
 
 router.get("/", async (req, res) => {
@@ -35,12 +36,20 @@ router.delete("/:id", async (req, res) => {
 
 router.patch("/:id", async (req, res) => {
 	try {
-		await courseModel.findByIdAndUpdate(req.params.id, req.body);
-		await courseModel.save();
-		res.send(course);
+		await courseModel.findByIdAndUpdate(
+			req.params.id,
+			req.body,
+			(err: any, course: any) => {
+				if (err) {
+					res.status(500).send(err);
+				} else {
+					res.send(course);
+				}
+			}
+		);
 	} catch (err) {
 		res.status(500).send(err);
 	}
 });
 
-module.exports = router;
+export default router;
